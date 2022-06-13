@@ -177,7 +177,8 @@
 				// Blocked
 				} else {
 					// Blocked
-					$hit = array('Blocked', 0);
+					$hit = array('Blocked', rand($playerA['damage'][0], $playerA['damage'][1]) / 2 - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]));
+					if ($hit[1] < 0) $hit[1] = 0;
 				}
 			// Miss
 			} else {
