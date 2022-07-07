@@ -197,28 +197,25 @@
 			// Single hit
 			if (rand(0, 100) <= $playerA['hit-chance']) {
 				// Critical hit
-				if (rand(0, 100) <= $playerA['hit-chance']) {
-					// Successful
-					if (rand(0, 100) > $playerB['critical-chance']) {
-						$hit = array(ARENA_SIMULATOR_HIT_CRITICAL, 2 * rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
-						if ($hit[1] < 0) $hit[1] = 0;
-					// Avoided
-					} else {
-						// Avoided
+				if (rand(0, 100) <= $playerA['critical-chance']) {
+					// Avoided critical
+					if (rand(0, 100) <= $playerB['avoid-critical-chance']) {
 						$hit = array(ARENA_SIMULATOR_HIT_AVOIDED_CRITICAL, rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
-						if ($hit[1] < 0) $hit[1] = 0;
+					}
+					// Full critical hit
+					else {
+						$hit = array(ARENA_SIMULATOR_HIT_CRITICAL, 2 * rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
 					}
 				}
 				// Normal hit
 				else {
-					// Successful
-					if (rand(0, 100) > $playerB['block-chance']) {
-						$hit = array(ARENA_SIMULATOR_HIT_NORMAL, rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
-						if ($hit[1] < 0) $hit[1] = 0;
 					// Blocked
-					} else {
+					if (rand(0, 100) <= $playerB['block-chance']) {
 						$hit = array(ARENA_SIMULATOR_HIT_BLOCKED, rand($playerA['damage'][0], $playerA['damage'][1]) / 2 - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]));
-						if ($hit[1] < 0) $hit[1] = 0;
+					}
+					// Successful normal hit
+					else {
+						$hit = array(ARENA_SIMULATOR_HIT_NORMAL, rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
 					}
 				}
 
@@ -229,6 +226,7 @@
 			}
 			
 			// Give back the hit value
+			if ($hit[1] < 0) $hit[1] = 0;
 			return $hit;
 		}
 
