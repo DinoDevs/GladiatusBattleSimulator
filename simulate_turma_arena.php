@@ -154,32 +154,29 @@
 		function turma_arena_simulator_hit_simulation($playerA, $playerB) {
 			// Single hit
 			if (rand(0, 100) <= $playerA['hit-chance'][$playerB['index']]) {
-				// Successful hit
-				if (rand(0, 100) > $playerB['block-chance'][$playerA['index']]) {
-					// Critical hit
-					if (rand(0, 100) <= $playerA['critical-chance']) {
-						// Successful
-						if (rand(0, 100) > $playerB['avoid-critical-chance']) {
-							$hit = array('Critical', 2 * rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
-							if ($hit[1] < 0) $hit[1] = 0;
-						// Avoided
-						} else {
-							// Avoided
-							$hit = array('Avoided Critical', rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
-							if ($hit[1] < 0) $hit[1] = 0;
-						}
-					// Normal hit
-					} else {
-						// Normal Hit Successfull
-						$hit = array('Normal', rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
-						if ($hit[1] < 0) $hit[1] = 0;
+				// Critical hit
+				if (rand(0, 100) <= $playerA['critical-chance']) {
+					// Avoided critical
+					if (rand(0, 100) <= $playerB['avoid-critical-chance']) {
+						$hit = array('Avoided Critical', rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
 					}
-				// Blocked
-				} else {
-					// Blocked
-					$hit = array('Blocked', rand($playerA['damage'][0], $playerA['damage'][1]) / 2 - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]));
-					if ($hit[1] < 0) $hit[1] = 0;
+					// Full critical hit
+					else {
+						$hit = array('Critical', 2 * rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
+					}
 				}
+				// Normal hit
+				else {
+					// Block
+					if (rand(0, 100) <= $playerB['block-chance'][$playerA['index']]) {
+						$hit = array('Blocked', rand($playerA['damage'][0], $playerA['damage'][1]) / 2 - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]));
+					}
+					// Successful normal hit
+					else {
+						$hit = array('Normal', rand($playerA['damage'][0], $playerA['damage'][1]) - rand($playerB['armor-absorve'][0], $playerB['armor-absorve'][1]) );
+					}
+				}
+			
 			// Miss
 			} else {
 				// Miss
@@ -187,6 +184,7 @@
 			}
 			
 			// Give back the hit value
+			if ($hit[1] < 0) $hit[1] = 0;
 			return $hit;
 		}
 
