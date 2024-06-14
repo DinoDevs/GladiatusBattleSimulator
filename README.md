@@ -61,7 +61,7 @@ Note: The player `name` is case sensitive. One can use an id instead.
 
 ## Turma
 
-Turma simulation is approximate since we are aware of the exact formular used. Here is what we have uncovered and how the simulator currently works:
+Turma simulation is approximate since we are unaware of the exact formular used. Here is what we have uncovered and how the simulator currently works:
 ```
 Each fighter has a threat based on which he attracts hits (chance to be hit = threat / total threat from all players). A fighter's threat is increased with each attack/heal he does.
 
